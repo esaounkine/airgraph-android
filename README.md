@@ -16,7 +16,7 @@ Fork this repo and import it into the project as a dependent module **or** downl
 
 There are no third party dependencies.
 
-1. Add the GraphView into a fragment
++ Add the GraphView into a fragment
 
 ```xml
 <air.graph.line.GraphView
@@ -25,7 +25,7 @@ There are no third party dependencies.
         app:graph_title="Weather Report"/>
 ```
 
-2. The style `RemainderVertical.AirGraph` is defined in the `styles.xml`
++ The style `RemainderVertical.AirGraph` is defined in the `styles.xml`
 
 ```xml
 <style name="RemainderVertical">
@@ -59,7 +59,7 @@ There are no third party dependencies.
 
 The colors used in the style definition are available in the `airgraph_colors.xml` file in the project
 
-3. Hook up to the AirGraph view in the Fragment `onCreateView` method
++ Hook up to the AirGraph view in the Fragment `onCreateView` method
 
 ```kotlin
 var weatherReportGraph: GraphView? = null
@@ -73,7 +73,7 @@ override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, saved
 }
 ```
 
-4. Fill the values of the graph. For instance, here's the weather report for the past few days.
++ Fill the values of the graph. For instance, here's the weather report for the past few days.
 
 ```kotlin
 val temperatureMap = mapOf(
@@ -88,7 +88,7 @@ weatherReportGraph?.values = temperatureMap.values().toArrayList()
 weatherReportGraph?.endPointLabel = "${temperatureMap.entrySet().last().getValue()} °C"
 ```
 
-5. Invalidate the View at `onResume()` to trigger Android to draw the View
++ Invalidate the View at `onResume()` to trigger Android to draw the View
 
 ```kotlin
 weatherReportGraph?.invalidate()
@@ -101,3 +101,8 @@ There are three layout/style irrelevant properties: `values`, `labels` and `endP
 
 
 ![airgraph properties cheatsheet](https://cloud.githubusercontent.com/assets/758512/6677666/dacae49c-cc3a-11e4-8d88-3ea51c4865b0.png)
+
+# Future tasks
+
+- Support for unbound number of labels/values
+- Optional Y-axis labels
