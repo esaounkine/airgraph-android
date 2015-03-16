@@ -94,6 +94,10 @@ weatherReportGraph?.endPointLabel = "${temperatureMap.entrySet().last().getValue
 weatherReportGraph?.invalidate()
 ```
 
+Output
+
+![airgraph output](https://cloud.githubusercontent.com/assets/758512/6677759/9ee5dd50-cc3b-11e4-869a-7ed63f4eabee.png)
+
 # Properties description
 Here's a cheatsheet to show all the XML or Java/Kotlin properties.
 
