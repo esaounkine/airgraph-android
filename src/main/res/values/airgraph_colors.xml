@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="graph_background">#323B47</color>
+    <color name="graph_line">#7D858F</color>
+    <color name="graph_area">#11ffffff</color>
+    <color name="graph_grid">#384452</color>
+    <color name="graph_text">#828996</color>
+    <color name="graph_mark">#AEF6DE</color>
+</resources>

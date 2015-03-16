@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="GraphView">
+        <attr name="graph_title" format="string"/>
+        <attr name="line_color" format="color"/>
+        <attr name="area_color" format="color"/>
+        <attr name="grid_color" format="color"/>
+        <attr name="text_color" format="color"/>
+        <attr name="mark_color" format="color"/>
+        <attr name="title_text_size" format="dimension"/>
+        <attr name="title_x_offset" format="dimension"/>
+        <attr name="title_y_offset" format="dimension"/>
+        <attr name="label_text_size" format="dimension"/>
+        <attr name="line_width" format="dimension"/>
+        <attr name="grid_line_width" format="dimension"/>
+        <attr name="end_point_marker_radius" format="dimension"/>
+        <attr name="end_point_label_text_size" format="dimension"/>
+        <attr name="end_point_label_x_offset" format="dimension"/>
+        <attr name="end_point_label_y_offset" format="dimension"/>
+        <attr name="vertical_offset" format="dimension"/>
+        <attr name="horizontal_offset" format="dimension"/>
+    </declare-styleable>
+</resources>
