@@ -7,6 +7,8 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.DashPathEffect
+import android.graphics.Paint.Align
+import android.graphics.Paint.Style
 
 public class GraphView(context: Context, attributeSet: AttributeSet) : View(context, attributeSet) {
     val a = context.obtainStyledAttributes(attributeSet, R.styleable.GraphView)
@@ -71,9 +73,7 @@ public class GraphView(context: Context, attributeSet: AttributeSet) : View(cont
         val halfColumn = columnWidth / 2
         var prevHeight = 0f
 
-        val linePaint = Paint()
-        linePaint.setColor(lineColor)
-        linePaint.setStrokeWidth(lineStrokeWidth)
+        val linePaint = getBrushPaint(color = lineColor, width = lineStrokeWidth)
 
         var path = Path()
         path.moveTo(0f, height)
@@ -101,41 +101,31 @@ public class GraphView(context: Context, attributeSet: AttributeSet) : View(cont
         path.lineTo(width, height)
         path.close()
 
-        val areaPaint = Paint()
-        areaPaint.setColor(areaColor)
-        areaPaint.setStrokeWidth(lineStrokeWidth)
-        areaPaint.setStyle(Paint.Style.FILL)
+        val areaPaint = getBrushPaint(color = areaColor, width = lineStrokeWidth, style = Style.FILL)
         canvas?.drawPath(path, areaPaint)
 
         return endPoint
     }
 
     private fun markLineEnd(endPoint: Pair<Float, Float>) {
-        val paint = Paint()
-        paint.setColor(markColor)
-
         if (endPointLabel != null) {
-            paint.setTextSize(endPointLabelTextSize)
-            paint.setTextAlign(Paint.Align.RIGHT)
-            canvas?.drawText(endPointLabel, graphWidth - endPointLabelXOffset, endPointLabelYOffset, paint)
+            val textPaint = getTextPaint(color = markColor, align = Align.RIGHT, size = endPointLabelTextSize)
+            canvas?.drawText(endPointLabel, graphWidth - endPointLabelXOffset, endPointLabelYOffset, textPaint)
         }
 
-        canvas?.drawCircle(endPoint.first, endPoint.second, endPointMarkerRadius, paint)
+        val linePaint = getBrushPaint(color = markColor, width = lineStrokeWidth, style = Style.FILL_AND_STROKE)
+        canvas?.drawCircle(endPoint.first, endPoint.second, endPointMarkerRadius, linePaint)
 
-        paint.setStyle(Paint.Style.STROKE)
-        paint.setStrokeWidth(lineStrokeWidth)
-        paint.setPathEffect(DashPathEffect(floatArray(10f, 10f), 0f))
+        linePaint.setPathEffect(DashPathEffect(floatArray(10f, 10f), 0f))
 
         val linePath = Path()
         linePath.moveTo(endPoint.first, endPoint.second)
         linePath.lineTo(endPoint.first, endPointLabelYOffset + 5f)
-        canvas?.drawPath(linePath, paint)
+        canvas?.drawPath(linePath, linePaint)
     }
 
     private fun drawGrid() {
-        val paint = Paint()
-        paint.setColor(gridColor)
-        paint.setStrokeWidth(gridStrokeWidth)
+        val paint = getBrushPaint(color = gridColor, width = gridStrokeWidth)
         (1..3).forEach {
             var y = height / 4 * (it)
             canvas?.drawLine(0f, y, width, y, paint)
@@ -143,20 +133,18 @@ public class GraphView(context: Context, attributeSet: AttributeSet) : View(cont
     }
 
     private fun drawLabels() {
-        val paint = Paint()
-        paint.setColor(textColor)
-        paint.setTextSize(labelTextSize)
+        val paint = getTextPaint(color = textColor, size = labelTextSize)
         labels.forEachIndexed {(i, label) ->
             val x = ((graphWidth / labels.size() - 1) * i) + horizontalOffset
             when (i) {
                 0 -> {
-                    paint.setTextAlign(Paint.Align.LEFT)
+                    paint.setTextAlign(Align.LEFT)
                 }
                 labels.size() - 1 -> {
-                    paint.setTextAlign(Paint.Align.RIGHT)
+                    paint.setTextAlign(Align.RIGHT)
                 }
                 else -> {
-                    paint.setTextAlign(Paint.Align.CENTER)
+                    paint.setTextAlign(Align.CENTER)
                 }
             }
             canvas?.drawText(label, x, height - labelTextSize, paint)
@@ -164,10 +152,23 @@ public class GraphView(context: Context, attributeSet: AttributeSet) : View(cont
     }
 
     private fun drawTitle() {
-        val paint = Paint()
-        paint.setColor(textColor)
-        paint.setTextAlign(Paint.Align.LEFT)
-        paint.setTextSize(titleTextSize)
+        val paint = getTextPaint(color = textColor, align = Align.LEFT, size = titleTextSize)
         canvas?.drawText(title, horizontalOffset + titleXOffset, titleTextSize + titleYOffset, paint)
+    }
+
+    private fun getTextPaint(color: Int, align: Align = Align.LEFT, size: Float): Paint {
+        val paint = Paint()
+        paint.setColor(color)
+        paint.setTextAlign(align)
+        paint.setTextSize(size)
+        return paint
+    }
+
+    private fun getBrushPaint(color: Int, width: Float, style: Style = Style.STROKE): Paint {
+        val paint = Paint()
+        paint.setColor(color)
+        paint.setStrokeWidth(width)
+        paint.setStyle(style)
+        return paint
     }
 }
