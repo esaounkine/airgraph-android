@@ -52,7 +52,9 @@ public class GraphView(context: Context, attributeSet: AttributeSet) : View(cont
 
         drawGrid()
 
-        drawLabels()
+        if (!labels.isEmpty()) {
+            drawLabels()
+        }
 
         if (!values.isEmpty()) {
             var endPoint = drawArea()
@@ -134,20 +136,29 @@ public class GraphView(context: Context, attributeSet: AttributeSet) : View(cont
 
     private fun drawLabels() {
         val paint = getTextPaint(color = textColor, size = labelTextSize)
-        labels.forEachIndexed {(i, label) ->
-            val x = ((graphWidth / labels.size() - 1) * i) + horizontalOffset
-            when (i) {
-                0 -> {
-                    paint.setTextAlign(Align.LEFT)
+
+        val columnWidth = (width - horizontalOffset) / labels.size()
+        val halfColumn = columnWidth / 2
+
+        var treshold = labels.size() / 4
+
+        labels.foldRight(0) {(label, i) ->
+            if (i % treshold == 0) {
+                val x = graphWidth - (columnWidth * i) - halfColumn
+                when (i) {
+                    0 -> {
+                        paint.setTextAlign(Align.RIGHT)
+                    }
+                    labels.size() - 1 -> {
+                        paint.setTextAlign(Align.LEFT)
+                    }
+                    else -> {
+                        paint.setTextAlign(Align.CENTER)
+                    }
                 }
-                labels.size() - 1 -> {
-                    paint.setTextAlign(Align.RIGHT)
-                }
-                else -> {
-                    paint.setTextAlign(Align.CENTER)
-                }
+                canvas?.drawText(label, x, height - labelTextSize, paint)
             }
-            canvas?.drawText(label, x, height - labelTextSize, paint)
+            i + 1
         }
     }
 
