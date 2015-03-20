@@ -38,17 +38,32 @@ public class GraphView(context: Context, attributeSet: AttributeSet) : View(cont
     var endPointLabel: String? = null
 
     var canvas: Canvas? = null
+    var max: Float = 0f
+    var min: Float = 0f
+    var diff: Float = 0f
+    var columnWidth: Float = 0f
+    var halfColumn: Float = 0f
     var graphWidth: Float = 0f
     var graphHeight: Float = 0f
     var width: Float = 0f
     var height: Float = 0f
 
-    override fun onDraw(canvas: Canvas) {
-        this.canvas = canvas
+    override fun onSizeChanged(width: Int, height: Int, oldWidth: Int, oldHeight: Int) {
         this.height = getHeight().toFloat()
         this.width = (getWidth() - 1).toFloat()
         this.graphHeight = height - (2 * verticalOffset)
         this.graphWidth = width - horizontalOffset
+        if (!values.isEmpty()) {
+            this.max = values.reduce {(memo, element) -> Math.max(memo, element) }
+            this.min = values.reduce {(memo, element) -> Math.min(memo, element) }
+        }
+        this.diff = max - min
+        this.columnWidth = (width - horizontalOffset) / values.size()
+        this.halfColumn = columnWidth / 2
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        this.canvas = canvas
 
         drawGrid()
 
@@ -56,11 +71,9 @@ public class GraphView(context: Context, attributeSet: AttributeSet) : View(cont
             drawLabels()
         }
 
-        if (!values.isEmpty()) {
-            var endPoint = drawArea()
+        var endPoint = drawArea()
 
-            markLineEnd(endPoint)
-        }
+        markLineEnd(endPoint)
 
         drawTitle()
     }
@@ -68,11 +81,6 @@ public class GraphView(context: Context, attributeSet: AttributeSet) : View(cont
     private fun drawArea(): Pair<Float, Float> {
         var endPoint = Pair(0f, 0f)
 
-        val max = values.reduce {(memo, element) -> Math.max(memo, element) }
-        val min = values.reduce {(memo, element) -> Math.min(memo, element) }
-        val diff = max - min
-        val columnWidth = (width - horizontalOffset) / values.size()
-        val halfColumn = columnWidth / 2
         var prevHeight = 0f
 
         val linePaint = getBrushPaint(color = lineColor, width = lineStrokeWidth)
