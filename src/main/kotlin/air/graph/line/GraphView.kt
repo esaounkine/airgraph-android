@@ -53,17 +53,17 @@ public class GraphView(context: Context, attributeSet: AttributeSet) : View(cont
         this.width = (getWidth() - 1).toFloat()
         this.graphHeight = height - (2 * verticalOffset)
         this.graphWidth = width - horizontalOffset
-        if (!values.isEmpty()) {
-            this.max = values.reduce {(memo, element) -> Math.max(memo, element) }
-            this.min = values.reduce {(memo, element) -> Math.min(memo, element) }
-        }
-        this.diff = max - min
-        this.columnWidth = (width - horizontalOffset) / values.size()
         this.halfColumn = columnWidth / 2
     }
 
     override fun onDraw(canvas: Canvas) {
         this.canvas = canvas
+        this.columnWidth = (width - horizontalOffset) / values.size()
+        if (!values.isEmpty()) {
+            this.max = values.reduce {(memo, element) -> Math.max(memo, element) }
+            this.min = values.reduce {(memo, element) -> Math.min(memo, element) }
+        }
+        this.diff = max - min
 
         drawGrid()
 
