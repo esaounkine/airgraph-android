@@ -180,6 +180,7 @@ public class GraphView(context: Context, attributeSet: AttributeSet) : View(cont
         paint.setColor(color)
         paint.setTextAlign(align)
         paint.setTextSize(size)
+        paint.setAntiAlias(true)
         return paint
     }
 
@@ -188,6 +189,7 @@ public class GraphView(context: Context, attributeSet: AttributeSet) : View(cont
         paint.setColor(color)
         paint.setStrokeWidth(width)
         paint.setStyle(style)
+        paint.setAntiAlias(true)
         return paint
     }
 }
